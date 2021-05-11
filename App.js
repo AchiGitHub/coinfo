@@ -10,12 +10,16 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import reducers from './src/reducers';
 import { SafeAreaView, StatusBar, StyleSheet, Text, View, Switch, Platform } from 'react-native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import thunk from 'redux-thunk';
 import { AdMobBanner, PublisherBanner } from 'react-native-admob';
+import { NavigationContainer } from '@react-navigation/native';
+
+import reducers from './src/reducers';
 
 import List from './src/container/List';
+import WishList from './src/container/WishList';
 
 // Middlewares: applyMiddleware() tells createStore() how to handle middleware
 const middleware = applyMiddleware(thunk);
@@ -28,9 +32,10 @@ const App = (props) => {
   const [isDark, setIsDark] = useState(false);
   const toggleSwitch = () => setIsDark(previousState => !previousState);
 
-  return (
-    <Provider store={store}>
-      {Platform.OS === "ios" && <StatusBar barStyle={!isDark ? "light-content" : "dark-content"} />}
+  const Tab = createBottomTabNavigator();
+
+  const homeView = () => {
+    return (
       <SafeAreaView style={!isDark ? styles.container : styles.containerLight}>
         <View style={styles.header}>
           <Text style={!isDark ? styles.headerText : styles.headerTextLight}>Coins</Text>
@@ -48,14 +53,26 @@ const App = (props) => {
         <View style={styles.adSlot}>
           <AdMobBanner
             adSize="mediumBanner"
-            adUnitID="ca-app-pub-3940256099942544/6300978111" //test ad id
-            // adUnitID="ca-app-pub-8167817804987450/7911429163"  //production id
+            // adUnitID="ca-app-pub-3940256099942544/6300978111" //test ad id
+            adUnitID="ca-app-pub-8167817804987450/7911429163"  //production id
             testDeviceID={[PublisherBanner.simulatorId]}
             onAdFailedToLoad={error => console.error(error)}
             onAppEvent={event => console.log(event.name, event.info)}
           />
         </View>
       </SafeAreaView>
+    )
+  }
+
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        {Platform.OS === "ios" && <StatusBar barStyle={!isDark ? "light-content" : "dark-content"} />}
+        <Tab.Navigator>
+          <Tab.Screen name="Home" component={homeView} />
+          <Tab.Screen name="Wish list" component={WishList} />
+        </Tab.Navigator>
+      </NavigationContainer >
     </Provider>
   );
 };
