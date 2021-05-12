@@ -1,21 +1,62 @@
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import Icon from 'react-native-vector-icons/AntDesign';
+import { connect } from 'react-redux';
+import PopUpModal from '../components/Modal/PopUpModal';
 
-function WishList() {
+function WishList(props) {
+
+    const [modalStatus, setModalStatus] = useState(false);
+
+    const saveFavoriteCoin = (coinName) => {
+
+    }
+
+    const deleteFavoriteCoin = (coinName) => {
+
+    }
+
     return (
         <SafeAreaView style={styles.container}>
-            <View>
-                <Text>Yo!</Text>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Favorites</Text>
+                <View style={styles.themeToggle}>
+                    <TouchableOpacity onPress={() => setModalStatus(!modalStatus)}>
+                        <Icon name="plus" color="#fff" size={30} />
+                    </TouchableOpacity>
+                </View>
             </View>
+            <PopUpModal data={props.coinData} saveFavoriteCoin={saveFavoriteCoin} modalStatus={modalStatus} setModalStatus={setModalStatus} />
         </SafeAreaView>
     )
 }
 
-export default WishList;
+const mapStateToProps = state => {
+    return {
+        coinData: state.coinData,
+        favoriteCoins: state.favoriteCoins
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    null
+)(WishList);
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: '#191721',
-        flex: 1
+    },
+    headerText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#fff',
+        padding: 10
+    },
+    themeToggle: {
+        position: 'absolute',
+        top: 10,
+        right: 15
     },
 });
