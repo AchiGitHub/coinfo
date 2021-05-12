@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
-import { FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SEARCH_COINS } from './types';
+import { FAVORITE_COINS, FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SEARCH_COINS } from './types';
 
 export function fetchCoinList() {
     return dispatch => {
@@ -20,7 +20,15 @@ export function searchCoinList(query) {
     return dispatch => {
         dispatch(searchCoin(query));
     }
+};
+
+export const saveFavoriteCoins = (data) => {
+    return dispatch => {
+        dispatch(saveFavCoin(data));
+    }
 }
+
+
 
 const fetchCoinDetails = () => ({
     type: FETCH_COIN_DETAILS
@@ -44,5 +52,12 @@ const searchCoin = (query) => ({
     type: SEARCH_COINS,
     payload: {
         query
+    }
+});
+
+const saveFavCoin = (data) => ({
+    type: FAVORITE_COINS,
+    payload: {
+        data
     }
 });
