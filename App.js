@@ -15,6 +15,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import thunk from 'redux-thunk';
 import { AdMobBanner, PublisherBanner } from 'react-native-admob';
 import { NavigationContainer } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import FontistoIcon from 'react-native-vector-icons/Fontisto';
 
 import reducers from './src/reducers';
 
@@ -39,7 +41,7 @@ const App = (props) => {
       <SafeAreaView style={!isDark ? styles.container : styles.containerLight}>
         <View style={styles.header}>
           <Text style={!isDark ? styles.headerText : styles.headerTextLight}>Coins</Text>
-          <View style={styles.themeToggle}>
+          {/* <View style={styles.themeToggle}>
             <Switch
               trackColor={{ false: "#767577", true: "#81b0ff" }}
               thumbColor={isDark ? "#f4f3f4" : "#5E6172"}
@@ -47,7 +49,7 @@ const App = (props) => {
               onValueChange={toggleSwitch}
               value={isDark}
             />
-          </View>
+          </View> */}
         </View>
         <List theme={isDark} />
         <View style={styles.adSlot}>
@@ -68,9 +70,25 @@ const App = (props) => {
     <Provider store={store}>
       <NavigationContainer>
         {Platform.OS === "ios" && <StatusBar barStyle={!isDark ? "light-content" : "dark-content"} />}
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={homeView} />
-          <Tab.Screen name="Wish list" component={WishList} />
+        <Tab.Navigator tabBarOptions={{
+          activeBackgroundColor: '#191721',
+          inactiveBackgroundColor: '#191721',
+          activeTintColor: '#fff'
+        }}>
+          <Tab.Screen name="Home" component={homeView} options={{
+            tabBarLabel: 'Home',
+            tabBarIcon: ({ color, size }) => (
+              <Icon name="home" color={color} size={size} />
+            ),
+          }}
+          />
+          <Tab.Screen name="Wish list" component={WishList} options={{
+            tabBarLabel: 'Wish List',
+            tabBarIcon: ({ color, size }) => (
+              <FontistoIcon name="favorite" color={color} size={size} />
+            ),
+          }}
+          />
         </Tab.Navigator>
       </NavigationContainer >
     </Provider>

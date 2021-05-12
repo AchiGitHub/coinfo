@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         backgroundColor: "#262530",
         borderRadius: 50,
-        padding: 20
+        padding: 14
     },
     inputLight: {
         marginTop: 20,
@@ -93,6 +93,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         backgroundColor: "#F0F0F0",
         borderRadius: 50,
-        padding: 20
+        padding: 17
     },
 });

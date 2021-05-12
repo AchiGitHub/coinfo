@@ -68,25 +68,25 @@ const styles = StyleSheet.create({
   },
   cardNameDark: {
     color: "#D0CFD2",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     fontFamily: 'Cochin'
   },
   cardNameLight: {
     color: "#000",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     fontFamily: 'Cochin'
   },
   coinRate: {
     color: "#FFF",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: 'center',
   },
   coinRateLight: {
     color: "#000",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     textAlign: 'center',
   },
@@ -109,21 +109,21 @@ const styles = StyleSheet.create({
     paddingTop: 8
   },
   rateOfIncrease: {
-    color: "#5aa897",
-    fontSize: 17,
-    textAlign: 'center',
+    color: "#59BC6E",
+    fontSize: 14,
+    textAlign: 'right',
     fontWeight: 'bold',
   },
   rateOfDecrease: {
-    color: '#ec4646',
-    fontSize: 17,
-    textAlign: 'center',
+    color: '#DA583F',
+    fontSize: 14,
+    textAlign: 'right',
     fontWeight: 'bold',
   },
   coinSymbol: {
     color: "#BBB6BB",
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '400',
   },
   containerLight: {},
   cardBodyLight: {
