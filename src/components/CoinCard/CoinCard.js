@@ -1,7 +1,10 @@
-import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Icon from "react-native-vector-icons/AntDesign";
 
-function CoinCard({ data, theme }) {
+function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
+
+  const [isFavorite, setIsFavorite] = useState(false);
 
   let percentageDecrease = false;
   let increaseRate;
@@ -17,6 +20,12 @@ function CoinCard({ data, theme }) {
     increaseRate = "-";
   }
 
+  useEffect(() => {
+    if (favoriteCoins.coins.includes(data.name)) {
+      setIsFavorite(true);
+    }
+  }, [])
+
   return (
     <View style={!theme ? styles.container : styles.containerLight}>
       <View style={!theme ? styles.cardBody : styles.cardBodyLight}>
@@ -29,17 +38,22 @@ function CoinCard({ data, theme }) {
               {data.symbol}
             </Text>
           </View>
-          <View>
-            <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
-              {formatter.format(parseFloat(data.priceUsd))}
-            </Text>
-            <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
-              {increaseRate}
-            </Text>
+          <View style={styles.coinDetails}>
+            <View>
+              <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
+                {formatter.format(parseFloat(data.priceUsd))}
+              </Text>
+              <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
+                {increaseRate}
+              </Text>
+            </View>
+            <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name) }}>
+              <Icon name={isFavorite ? "heart" : "hearto"} color="#fff" size={20} style={styles.favorite} />
+            </TouchableOpacity>
           </View>
         </View>
       </View>
-    </View>
+    </View >
   );
 }
 
@@ -130,6 +144,13 @@ const styles = StyleSheet.create({
     padding: 20,
     borderBottomColor: "#F0F0F0",
     borderBottomWidth: 4
+  },
+  coinDetails: {
+    flexDirection: 'row'
+  },
+  favorite: {
+    marginLeft: 10,
+    marginTop: 7
   }
 });
 

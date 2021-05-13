@@ -1,21 +1,92 @@
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import FavoriteCard from '../components/FavoriteCard/FavoriteCard';
 
-function WishList() {
+function WishList(props) {
+
+    const [favorites, setFavorites] = useState([]);
+    const [favoriteCoinData, setfavoriteCoinData] = useState([]);
+
+    const isFocused = useIsFocused();
+
+    useEffect(() => {
+        getFavoriteCoins();
+    }, [isFocused]);
+
+    const getFavoriteCoins = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@coins')
+            if (value !== null) {
+                let data = JSON.parse(value);
+                setFavorites(data.coins);
+                setFavoriteData(data.coins);
+            }
+        } catch (e) {
+            // saving error
+        }
+    }
+
+    const setFavoriteData = (data) => {
+        const filteredArray = props.coinData.filter((el) => {
+            return data.some((f) => {
+                return f === el.name;
+            });
+        });
+        setfavoriteCoinData(filteredArray);
+    }
+
+    const _renderItem = ({ item }) => {
+        return <FavoriteCard data={item} />
+    };
+
     return (
         <SafeAreaView style={styles.container}>
-            <View>
-                <Text>Yo!</Text>
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Favorites</Text>
             </View>
+            <FlatList
+                data={favoriteCoinData}
+                renderItem={_renderItem}
+                showsVerticalScrollIndicator={false}
+                snapToAlignment={'start'}
+                decelerationRate={'fast'}
+                keyExtractor={(item, index) => index.toString()}
+            // onRefresh={() => _onRefresh()}
+            // refreshing={props.loading}
+            // ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
+            />
         </SafeAreaView>
     )
 }
 
-export default WishList;
+const mapStateToProps = state => {
+    return {
+        coinData: state.coinData
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    null
+)(WishList);
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
         backgroundColor: '#191721',
-        flex: 1
+    },
+    headerText: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color: '#fff',
+        padding: 10
+    },
+    themeToggle: {
+        position: 'absolute',
+        top: 10,
+        right: 15
     },
 });

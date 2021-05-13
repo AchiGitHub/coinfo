@@ -20,7 +20,7 @@ export function searchCoinList(query) {
     return dispatch => {
         dispatch(searchCoin(query));
     }
-}
+};
 
 const fetchCoinDetails = () => ({
     type: FETCH_COIN_DETAILS

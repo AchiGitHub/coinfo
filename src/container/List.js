@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
@@ -7,14 +8,20 @@ import EmptyList from "../components/EmptyList/EmptyList";
 
 const List = props => {
 
+    let initialData = {
+        coins: []
+    }
+
     const [search, setSearch] = useState('');
+    const [favoriteCoins, setFavoriteCoints] = useState(initialData);
 
     useEffect(() => {
         props.fetchCoinList();
+        getFavoriteCoins();
     }, []);
 
     const _renderItem = ({ item }) => {
-        return <CoinCard data={item} theme={props.theme} />
+        return <CoinCard data={item} theme={props.theme} saveFavoriteCoin={saveOrDelete} favoriteCoins={favoriteCoins} />
     };
 
     const _onRefresh = () => {
@@ -23,6 +30,46 @@ const List = props => {
 
     const onSearchChange = (value) => {
         props.searchCoins(value)
+    }
+
+    const storeFavorite = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@coins', jsonValue);
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const getFavoriteCoins = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@coins')
+            if (value !== null) {
+                let data = JSON.parse(value);
+                setFavoriteCoints(data);
+            }
+        } catch (e) {
+            // saving error
+        }
+    }
+
+    const saveOrDelete = (coinName) => {
+        if (favoriteCoins.coins.includes(coinName)) {
+            let index = favoriteCoins.coins.indexOf(coinName);
+            if (index > -1) {
+                favoriteCoins.coins.splice(index, 1);
+                storeFavorite(favoriteCoins);
+            }
+        } else {
+            let data = favoriteCoins.coins;
+            data.push(coinName);
+            let newData = {
+                coins: data
+            };
+            console.log(newData)
+            setFavoriteCoints(newData);
+            storeFavorite(newData);
+        }
     }
 
     return (
