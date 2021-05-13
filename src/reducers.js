@@ -2,16 +2,14 @@ import {
   FETCH_COIN_DETAILS_FAILED,
   FETCH_COIN_DETAILS_SUCCESS,
   FETCH_COIN_DETAILS,
-  SEARCH_COINS,
-  FAVORITE_COINS
+  SEARCH_COINS
 } from "./types";
 
 const initialState = {
   loading: false,
   coinData: [],
   error: null,
-  allCoinData: [],
-  favoriteCoins: []
+  allCoinData: []
 };
 
 export default function coinDataReducer(state = initialState, action) {
@@ -44,11 +42,6 @@ export default function coinDataReducer(state = initialState, action) {
       return {
         ...state,
         coinData: searchFilterList
-      };
-    case FAVORITE_COINS:
-      return {
-        ...state,
-        favoriteCoins: action.payload
       };
     default:
       return state;

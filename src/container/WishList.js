@@ -1,36 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { saveFavoriteCoins } from '../actions';
-import PopUpModal from '../components/Modal/PopUpModal';
-
 function WishList(props) {
 
-    const [modalStatus, setModalStatus] = useState(false);
+    const [favorites, setFavorites] = useState([]);
 
-    const saveFavoriteCoin = (coinName) => {
-        let coins = props.favoriteCoins.push(coinName);
-        let coinObject = {
-            coins: coins
-        };
-        saveFavoriteCoins(coins);
-        storeFavorite(coinObject);
-        setModalStatus(false);
-    }
+    useEffect(() => {
+        getFavoriteCoins();
+    }, []);
 
-    const deleteFavoriteCoin = (coinName) => {
-
-    }
-
-    const storeFavorite = async (value) => {
+    const getFavoriteCoins = async () => {
         try {
-            const jsonValue = JSON.stringify(value)
-            await AsyncStorage.setItem('@coins', jsonValue)
+            const value = await AsyncStorage.getItem('@coins')
+            if (value !== null) {
+                let data = JSON.parse(value);
+                setFavorites(data.coins);
+            }
         } catch (e) {
-            console.log(e)
+            // saving error
         }
     }
 
@@ -38,21 +28,14 @@ function WishList(props) {
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Favorites</Text>
-                <View style={styles.themeToggle}>
-                    <TouchableOpacity onPress={() => setModalStatus(!modalStatus)}>
-                        <Icon name="plus" color="#fff" size={30} />
-                    </TouchableOpacity>
-                </View>
             </View>
-            <PopUpModal data={props.coinData} saveFavoriteCoin={saveFavoriteCoin} modalStatus={modalStatus} setModalStatus={setModalStatus} />
         </SafeAreaView>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        coinData: state.coinData,
-        favoriteCoins: state.favoriteCoins
+        coinData: state.coinData
     };
 };
 
