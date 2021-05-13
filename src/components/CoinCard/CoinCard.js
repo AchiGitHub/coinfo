@@ -48,7 +48,7 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
               </Text>
             </View>
             <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name) }}>
-              <Icon name={isFavorite ? "heart" : "hearto"} color="#fff" size={20} style={styles.favorite} />
+              <Icon name={isFavorite ? "star" : "staro"} color="#ffd56b" size={20} style={styles.favorite} />
             </TouchableOpacity>
           </View>
         </View>
@@ -70,7 +70,10 @@ const styles = StyleSheet.create({
     marginTop: 15
   },
   cardBody: {
-    padding: 20,
+    paddingLeft: 8,
+    paddingRight: 8,
+    paddingBottom: 5,
+    paddingTop: 5,
     backgroundColor: "#191721",
     borderBottomColor: "#15151F",
     borderBottomWidth: 4
