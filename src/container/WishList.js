@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react'
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Icon from 'react-native-vector-icons/AntDesign';
+import { FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from '@react-navigation/native';
+import FavoriteCard from '../components/FavoriteCard/FavoriteCard';
 
 function WishList(props) {
 
     const [favorites, setFavorites] = useState([]);
+    const [favoriteCoinData, setfavoriteCoinData] = useState([]);
+
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         getFavoriteCoins();
-    }, []);
+    }, [isFocused]);
 
     const getFavoriteCoins = async () => {
         try {
@@ -18,17 +22,42 @@ function WishList(props) {
             if (value !== null) {
                 let data = JSON.parse(value);
                 setFavorites(data.coins);
+                setFavoriteData(data.coins);
             }
         } catch (e) {
             // saving error
         }
     }
 
+    const setFavoriteData = (data) => {
+        const filteredArray = props.coinData.filter((el) => {
+            return data.some((f) => {
+                return f === el.name;
+            });
+        });
+        setfavoriteCoinData(filteredArray);
+    }
+
+    const _renderItem = ({ item }) => {
+        return <FavoriteCard data={item} />
+    };
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
                 <Text style={styles.headerText}>Favorites</Text>
             </View>
+            <FlatList
+                data={favoriteCoinData}
+                renderItem={_renderItem}
+                showsVerticalScrollIndicator={false}
+                snapToAlignment={'start'}
+                decelerationRate={'fast'}
+                keyExtractor={(item, index) => index.toString()}
+            // onRefresh={() => _onRefresh()}
+            // refreshing={props.loading}
+            // ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
+            />
         </SafeAreaView>
     )
 }
