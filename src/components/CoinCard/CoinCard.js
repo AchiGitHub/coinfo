@@ -24,7 +24,7 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
     if (favoriteCoins.coins.includes(data.name)) {
       setIsFavorite(true);
     }
-  }, [])
+  }, [favoriteCoins.coins])
 
   return (
     <View style={!theme ? styles.container : styles.containerLight}>

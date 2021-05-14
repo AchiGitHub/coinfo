@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { FlatList, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
 import { fetchCoinList, searchCoinList } from "../actions";
@@ -12,13 +13,18 @@ const List = props => {
         coins: []
     }
 
+    let isFocused = useIsFocused();
+
     const [search, setSearch] = useState('');
     const [favoriteCoins, setFavoriteCoints] = useState(initialData);
 
     useEffect(() => {
         props.fetchCoinList();
-        getFavoriteCoins();
     }, []);
+
+    useEffect(() => {
+        getFavoriteCoins();
+    }, [isFocused]);
 
     const _renderItem = ({ item }) => {
         return <CoinCard data={item} theme={props.theme} saveFavoriteCoin={saveOrDelete} favoriteCoins={favoriteCoins} />
@@ -91,6 +97,7 @@ const List = props => {
                 onRefresh={() => _onRefresh()}
                 refreshing={props.loading}
                 ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
+                extraData={favoriteCoins.coins}
             />
         </>
     );
