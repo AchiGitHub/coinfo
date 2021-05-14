@@ -40,8 +40,30 @@ function WishList(props) {
     }
 
     const _renderItem = ({ item }) => {
-        return <FavoriteCard data={item} />
+        return <FavoriteCard data={item} deleteFavorite={deleteFavorite} />
     };
+
+    const deleteFavorite = (name) => {
+        let index = favorites.indexOf(name);
+        if (index > -1) {
+            favorites.splice(index, 1);
+            let newData = {
+                coins: favorites
+            };
+
+            setFavoriteData(newData.coins);
+            storeFavorite(newData);
+        }
+    }
+
+    const storeFavorite = async (value) => {
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@coins', jsonValue);
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     return (
         <SafeAreaView style={styles.container}>
