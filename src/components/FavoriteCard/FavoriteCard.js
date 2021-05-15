@@ -7,16 +7,17 @@ function FavoriteCard({ data, deleteFavorite }) {
     let percentageDecrease = false;
     let increaseRate;
 
-    if (!!data.changePercent24Hr) {
-        if (data.changePercent24Hr.includes("-")) {
+    if (!!data.quote.USD.percent_change_1h) {
+        if (data.quote.USD.percent_change_1h < 0) {
             percentageDecrease = true;
-            increaseRate = `${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+            increaseRate = `${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
         } else {
-            increaseRate = `+${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+            increaseRate = `+${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
         }
     } else {
         increaseRate = "-";
     }
+
 
     return (
         <View style={styles.container}>
@@ -33,7 +34,7 @@ function FavoriteCard({ data, deleteFavorite }) {
                     <View style={styles.coinDetails}>
                         <View>
                             <Text style={styles.coinRate} numberOfLines={2}>
-                                {formatter.format(parseFloat(data.priceUsd))}
+                                {formatter.format(parseFloat(data.quote.USD.price))}
                             </Text>
                             <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                                 {increaseRate}
