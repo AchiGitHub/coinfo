@@ -9,12 +9,12 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
   let percentageDecrease = false;
   let increaseRate;
 
-  if (!!data.changePercent24Hr) {
-    if (data.changePercent24Hr.includes("-")) {
+  if (!!data.quote.USD.percent_change_1h) {
+    if (data.quote.USD.percent_change_1h < 0) {
       percentageDecrease = true;
-      increaseRate = `${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+      increaseRate = `${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
     } else {
-      increaseRate = `+${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+      increaseRate = `+${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
     }
   } else {
     increaseRate = "-";
@@ -31,9 +31,14 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
       <View style={!theme ? styles.cardBody : styles.cardBodyLight}>
         <View style={styles.cardBodyTop}>
           <View>
-            <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
-              {data.name}
-            </Text>
+            <View style={styles.nameSlot}>
+              <Text style={styles.rank}>
+                {`${data.cmc_rank}). `}
+              </Text>
+              <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
+                {data.name}
+              </Text>
+            </View>
             <Text style={styles.coinSymbol} numberOfLines={2}>
               {data.symbol}
             </Text>
@@ -41,7 +46,7 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
           <View style={styles.coinDetails}>
             <View>
               <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
-                {formatter.format(parseFloat(data.priceUsd))}
+                {formatter.format(parseFloat(data.quote.USD.price))}
               </Text>
               <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                 {increaseRate}
@@ -154,6 +159,15 @@ const styles = StyleSheet.create({
   favorite: {
     marginLeft: 10,
     marginTop: 7
+  },
+  nameSlot: {
+    flexDirection: 'row'
+  },
+  rank: {
+    color: '#FFF',
+    marginTop: 2,
+    marginRight: 5,
+    fontWeight: 'bold'
   }
 });
 

@@ -6,7 +6,7 @@ export function fetchCoinList() {
     return dispatch => {
         dispatch(fetchCoinDetails());
         axios
-            .get(`https://api.coincap.io/v2/assets`)
+            .get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`, { headers: { 'X-CMC_PRO_API_KEY': 'a87168a1-1f6c-4104-8034-82ce95835a31' } })
             .then(res => {
                 dispatch(fetchCoinDetailsSuccess(res.data));
             })
