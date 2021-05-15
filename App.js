@@ -80,6 +80,7 @@ const App = (props) => {
             tabBarIcon: ({ color, size }) => (
               <Icon name="home" color={color} size={size} />
             ),
+            unmountOnBlur: true
           }}
           />
           <Tab.Screen name="Wish list" component={WishList} options={{

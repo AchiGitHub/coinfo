@@ -1,7 +1,8 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
-function FavoriteCard({ data }) {
+function FavoriteCard({ data, deleteFavorite }) {
 
     let percentageDecrease = false;
     let increaseRate;
@@ -38,6 +39,9 @@ function FavoriteCard({ data }) {
                                 {increaseRate}
                             </Text>
                         </View>
+                        <TouchableOpacity onPress={() => deleteFavorite(data.name)}>
+                            <Icon name="star" color="#ffd56b" size={20} style={styles.favorite} />
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -52,7 +56,10 @@ const styles = StyleSheet.create({
         backgroundColor: "#191721"
     },
     cardBody: {
-        padding: 20,
+        paddingLeft: 8,
+        paddingRight: 8,
+        paddingBottom: 5,
+        paddingTop: 5,
         backgroundColor: "#191721",
         borderBottomColor: "#15151F",
         borderBottomWidth: 4
