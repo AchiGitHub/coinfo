@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SvgCssUri } from "react-native-svg";
 import Icon from "react-native-vector-icons/AntDesign";
 
 function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
@@ -8,13 +9,13 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
 
   let percentageDecrease = false;
   let increaseRate;
-
-  if (!!data.quote.USD.percent_change_1h) {
-    if (data.quote.USD.percent_change_1h < 0) {
+  if (!!data["1d"].price_change_pct) {
+    let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
+    if (parseFloat(data["1d"].price_change_pct) < 0) {
       percentageDecrease = true;
-      increaseRate = `${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
+      increaseRate = `${pricePercantage24h.toFixed(2)}%`;
     } else {
-      increaseRate = `+${(data.quote.USD.percent_change_1h).toFixed(2)}%`;
+      increaseRate = `+${pricePercantage24h.toFixed(2)}%`;
     }
   } else {
     increaseRate = "-";
@@ -27,26 +28,35 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
   }, [favoriteCoins.coins])
 
   return (
-    <View style={!theme ? styles.container : styles.containerLight}>
-      <View style={!theme ? styles.cardBody : styles.cardBodyLight}>
+    <View style={styles.container}>
+      <View style={styles.cardBody}>
         <View style={styles.cardBodyTop}>
-          <View>
-            <View style={styles.nameSlot}>
-              <Text style={styles.rank}>
-                {`${data.cmc_rank}). `}
-              </Text>
-              <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
-                {data.name}
+          <View style={styles.nameSlot}>
+            <View style={styles.logo}>
+              {
+                data.logo_url.includes('svg') ? <SvgCssUri
+                  width={30}
+                  height={30}
+                  uri={data.logo_url}
+                />
+                  : <Image source={{ uri: data.logo_url }} style={{ width: 30, height: 30, resizeMode: 'cover' }} />
+              }
+            </View>
+            <View>
+              <View>
+                <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
+                  {data.name}
+                </Text>
+              </View>
+              <Text style={styles.coinSymbol} numberOfLines={2}>
+                {data.symbol}
               </Text>
             </View>
-            <Text style={styles.coinSymbol} numberOfLines={2}>
-              {data.symbol}
-            </Text>
           </View>
           <View style={styles.coinDetails}>
             <View>
               <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
-                {formatter.format(parseFloat(data.quote.USD.price))}
+                {formatter.format(parseFloat(data.price))}
               </Text>
               <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                 {increaseRate}
@@ -67,12 +77,6 @@ export default CoinCard;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#191721"
-  },
-  cardContainer: {
-    padding: 15,
-    paddingBottom: 0,
-    paddingTop: 0,
-    marginTop: 15
   },
   cardBody: {
     paddingLeft: 8,
@@ -168,6 +172,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
     marginRight: 5,
     fontWeight: 'bold'
+  },
+  logo: {
+    padding: 8
   }
 });
 
