@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import { SvgCssUri } from 'react-native-svg';
 import Icon from 'react-native-vector-icons/AntDesign';
 
