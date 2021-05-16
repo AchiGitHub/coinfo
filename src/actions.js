@@ -6,7 +6,7 @@ export function fetchCoinList() {
     return dispatch => {
         dispatch(fetchCoinDetails());
         axios
-            .get(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest`, { headers: { 'X-CMC_PRO_API_KEY': 'a87168a1-1f6c-4104-8034-82ce95835a31' } })
+            .get(`https://api.nomics.com/v1/currencies/ticker?key=aec0250b1d047a85b34b149b04aeacab194a2ac8&per-page=150&interval=1d`)
             .then(res => {
                 dispatch(fetchCoinDetailsSuccess(res.data));
             })
@@ -29,7 +29,7 @@ const fetchCoinDetails = () => ({
 const fetchCoinDetailsSuccess = data => ({
     type: FETCH_COIN_DETAILS_SUCCESS,
     payload: {
-        ...data
+        data
     }
 });
 
