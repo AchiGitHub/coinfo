@@ -7,6 +7,7 @@ function FavoriteCard({ data, deleteFavorite }) {
 
     let percentageDecrease = false;
     let increaseRate;
+    let price = 0;
 
     if (!!data["1d"].price_change_pct) {
         let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
@@ -18,6 +19,12 @@ function FavoriteCard({ data, deleteFavorite }) {
         }
     } else {
         increaseRate = "-";
+    }
+
+    if (parseFloat(data.price) < 1) {
+        price = `$${data.price}`;
+    } else {
+        price = `$${parseFloat(data.price).toFixed(2)}`
     }
 
 
@@ -50,7 +57,7 @@ function FavoriteCard({ data, deleteFavorite }) {
                     <View style={styles.coinDetails}>
                         <View>
                             <Text style={styles.coinRate} numberOfLines={2}>
-                                {formatter.format(parseFloat(data.price))}
+                                {price}
                             </Text>
                             <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                                 {increaseRate}
