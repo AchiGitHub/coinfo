@@ -5,6 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useIsFocused } from '@react-navigation/native';
 import FavoriteCard from '../components/FavoriteCard/FavoriteCard';
 import { AdMobBanner, PublisherBanner } from 'react-native-admob';
+import { deleteFavorite } from '../actions';
 
 function WishList(props) {
 
@@ -53,6 +54,7 @@ function WishList(props) {
 
             setFavoriteData(newData.coins);
             storeFavorite(newData);
+            props.deleteFavorites(name);
         }
     }
 
@@ -93,7 +95,15 @@ function WishList(props) {
             </View>
         </SafeAreaView>
     )
-}
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        deleteFavorites: (name) => {
+            dispatch(deleteFavorite(name))
+        }
+    };
+};
 
 const mapStateToProps = state => {
     return {
@@ -103,7 +113,7 @@ const mapStateToProps = state => {
 
 export default connect(
     mapStateToProps,
-    null
+    mapDispatchToProps
 )(WishList);
 
 const styles = StyleSheet.create({
