@@ -9,6 +9,8 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
 
   let percentageDecrease = false;
   let increaseRate;
+  let price = 0;
+
   if (!!data["1d"].price_change_pct) {
     let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
     if (parseFloat(data["1d"].price_change_pct) < 0) {
@@ -19,6 +21,12 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
     }
   } else {
     increaseRate = "-";
+  }
+
+  if (parseFloat(data.price) < 1) {
+    price = `$${data.price}`;
+  } else {
+    price = `$${parseFloat(data.price).toFixed(2)}`
   }
 
   useEffect(() => {
@@ -56,7 +64,7 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
           <View style={styles.coinDetails}>
             <View>
               <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
-                {formatter.format(parseFloat(data.price))}
+                {price}
               </Text>
               <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                 {increaseRate}
