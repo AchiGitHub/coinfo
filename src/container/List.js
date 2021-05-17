@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
 import { FlatList, StyleSheet, TextInput } from "react-native";
 import { connect } from "react-redux";
-import { fetchCoinList, searchCoinList } from "../actions";
+import { deleteFavorite, fetchCoinList, saveFavoriteCoin, searchCoinList } from "../actions";
 import CoinCard from "../components/CoinCard/CoinCard";
 import EmptyList from "../components/EmptyList/EmptyList";
 
@@ -13,14 +13,10 @@ const List = props => {
         coins: []
     }
 
-    let isFocused = useIsFocused();
-
     const [search, setSearch] = useState('');
     const [favoriteCoins, setFavoriteCoints] = useState(initialData);
 
-    useEffect(() => {
-        props.fetchCoinList();
-    }, []);
+    let isFocused = useIsFocused();
 
     useEffect(() => {
         getFavoriteCoins();
@@ -31,7 +27,7 @@ const List = props => {
     };
 
     const _onRefresh = () => {
-        props.fetchCoinList();
+        getFavoriteCoins();
     }
 
     const onSearchChange = (value) => {
@@ -49,7 +45,8 @@ const List = props => {
 
     const getFavoriteCoins = async () => {
         try {
-            const value = await AsyncStorage.getItem('@coins')
+            const value = await AsyncStorage.getItem('@coins');
+            props.fetchCoinList(value);
             if (value !== null) {
                 let data = JSON.parse(value);
                 setFavoriteCoints(data);
@@ -59,22 +56,23 @@ const List = props => {
         }
     }
 
-    const saveOrDelete = (coinName) => {
-        if (favoriteCoins.coins.includes(coinName)) {
-            let index = favoriteCoins.coins.indexOf(coinName);
-            if (index > -1) {
-                favoriteCoins.coins.splice(index, 1);
-                storeFavorite(favoriteCoins);
-            }
-        } else {
+    const saveOrDelete = (coinName, state) => {
+        if (state) {
+            props.saveFavorites(coinName);
             let data = favoriteCoins.coins;
             data.push(coinName);
             let newData = {
                 coins: data
             };
-            console.log(newData)
             setFavoriteCoints(newData);
             storeFavorite(newData);
+        } else {
+            let index = favoriteCoins.coins.indexOf(coinName);
+            if (index > -1) {
+                favoriteCoins.coins.splice(index, 1);
+                storeFavorite(favoriteCoins);
+            }
+            props.deleteFavorites(coinName);
         }
     }
 
@@ -105,11 +103,17 @@ const List = props => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchCoinList: () => {
-            dispatch(fetchCoinList());
+        fetchCoinList: (data) => {
+            dispatch(fetchCoinList(data));
         },
         searchCoins: (query) => {
             dispatch(searchCoinList(query))
+        },
+        saveFavorites: (name) => {
+            dispatch(saveFavoriteCoin(name))
+        },
+        deleteFavorites: (name) => {
+            dispatch(deleteFavorite(name))
         }
     };
 };

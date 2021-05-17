@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
-import { FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SEARCH_COINS } from './types';
+import { DELETE_FAVORITE, FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SAVE_FAVORITE, SEARCH_COINS } from './types';
 
-export function fetchCoinList() {
+export function fetchCoinList(data) {
     return dispatch => {
-        dispatch(fetchCoinDetails());
+        dispatch(fetchCoinDetails(data));
         axios
             .get(`https://api.nomics.com/v1/currencies/ticker?key=aec0250b1d047a85b34b149b04aeacab194a2ac8&per-page=150&interval=1d`)
             .then(res => {
@@ -22,8 +22,23 @@ export function searchCoinList(query) {
     }
 };
 
-const fetchCoinDetails = () => ({
-    type: FETCH_COIN_DETAILS
+export function saveFavoriteCoin(name) {
+    return dispatch => {
+        dispatch(saveFavorite(name));
+    }
+};
+
+export function deleteFavorite(name) {
+    return dispatch => {
+        dispatch(removeFavorite(name));
+    }
+};
+
+const fetchCoinDetails = (data) => ({
+    type: FETCH_COIN_DETAILS,
+    payload: {
+        data
+    }
 });
 
 const fetchCoinDetailsSuccess = data => ({
@@ -44,5 +59,19 @@ const searchCoin = (query) => ({
     type: SEARCH_COINS,
     payload: {
         query
+    }
+});
+
+const saveFavorite = (coinName) => ({
+    type: SAVE_FAVORITE,
+    payload: {
+        coinName
+    }
+});
+
+const removeFavorite = (coinName) => ({
+    type: DELETE_FAVORITE,
+    payload: {
+        coinName
     }
 });

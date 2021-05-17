@@ -3,9 +3,9 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SvgCssUri } from "react-native-svg";
 import Icon from "react-native-vector-icons/AntDesign";
 
-function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
+function CoinCard({ data, theme, saveFavoriteCoin }) {
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
 
   let percentageDecrease = false;
   let increaseRate;
@@ -28,12 +28,6 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
   } else {
     price = `$${parseFloat(data.price).toFixed(2)}`
   }
-
-  useEffect(() => {
-    if (favoriteCoins.coins.includes(data.name)) {
-      setIsFavorite(true);
-    }
-  }, [favoriteCoins.coins])
 
   return (
     <View style={styles.container}>
@@ -70,8 +64,8 @@ function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
                 {increaseRate}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name) }}>
-              <Icon name={isFavorite ? "star" : "staro"} color="#ffd56b" size={20} style={styles.favorite} />
+            <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name, !isFavorite) }}>
+              <Icon name={data.isFavorite ? "star" : "staro"} color="#ffd56b" size={20} style={styles.favorite} />
             </TouchableOpacity>
           </View>
         </View>
