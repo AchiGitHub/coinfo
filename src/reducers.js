@@ -62,16 +62,30 @@ export default function coinDataReducer(state = initialState, action) {
         coinData: searchFilterList
       };
     case SAVE_FAVORITE:
-      let index = state.coinData.findIndex(data => data.name === action.payload.coinName);
-      state.coinData[index].isFavorite = true;
-      state.allCoinData[index].isFavorite = true;
+      state.coinData.map((data, idx) => {
+        if (data.name === action.payload.coinName) {
+          data.isFavorite = true;
+        }
+      });
+      state.allCoinData.map((data, idx) => {
+        if (data.name === action.payload.coinName) {
+          data.isFavorite = true;
+        }
+      });
       return {
         ...state
-      };
+      }
     case DELETE_FAVORITE:
-      let idx = state.coinData.findIndex(data => data.name === action.payload.coinName);
-      state.coinData[idx].isFavorite = false;
-      state.allCoinData[idx].isFavorite = false;
+      state.coinData.map((data, idx) => {
+        if (data.name === action.payload.coinName) {
+          data.isFavorite = false;
+        }
+      });
+      state.allCoinData.map((data, idx) => {
+        if (data.name === action.payload.coinName) {
+          data.isFavorite = false;
+        }
+      });
       return {
         ...state
       };

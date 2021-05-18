@@ -31,7 +31,7 @@ const List = props => {
     }
 
     const onSearchChange = (value) => {
-        props.searchCoins(value)
+        props.searchCoins(value);
     }
 
     const storeFavorite = async (value) => {
@@ -95,7 +95,7 @@ const List = props => {
                 onRefresh={() => _onRefresh()}
                 refreshing={props.loading}
                 ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
-                extraData={favoriteCoins.coins}
+                extraData={props.coinData}
             />
         </>
     );
