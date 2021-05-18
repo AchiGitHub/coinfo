@@ -26,7 +26,7 @@ function CoinCard({ data, theme, saveFavoriteCoin }) {
   if (parseFloat(data.price) < 1) {
     price = `$${data.price}`;
   } else {
-    price = `$${parseFloat(data.price).toFixed(2)}`
+    price = formatter.format(parseFloat(data.price).toFixed(2));
   }
 
   return (
