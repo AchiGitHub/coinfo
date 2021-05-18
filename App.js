@@ -86,7 +86,7 @@ const App = (props) => {
             tabBarLabel: 'Wish List',
             tabBarIcon: ({ color, size }) => (
               <FontistoIcon name="favorite" color={color} size={size} />
-            ),
+            )
           }}
           />
         </Tab.Navigator>
