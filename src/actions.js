@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
-import { DELETE_FAVORITE, FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SAVE_FAVORITE, SEARCH_COINS } from './types';
+import { DELETE_FAVORITE, FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SAVE_FAVORITE, SEARCH_COINS, SORT_LIST } from './types';
 
 export function fetchCoinList(data) {
     return dispatch => {
@@ -31,6 +31,12 @@ export function saveFavoriteCoin(name) {
 export function deleteFavorite(name) {
     return dispatch => {
         dispatch(removeFavorite(name));
+    }
+};
+
+export function sortList(type) {
+    return dispatch => {
+        dispatch(sortCoinList(type));
     }
 };
 
@@ -73,5 +79,12 @@ const removeFavorite = (coinName) => ({
     type: DELETE_FAVORITE,
     payload: {
         coinName
+    }
+});
+
+const sortCoinList = (type) => ({
+    type: SORT_LIST,
+    payload: {
+        type
     }
 });
