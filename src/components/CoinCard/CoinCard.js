@@ -11,7 +11,7 @@ function CoinCard({ data, theme, saveFavoriteCoin }) {
   let increaseRate;
   let price = 0;
 
-  if (!!data["1d"].price_change_pct) {
+  if (data && data["1d"] && data["1d"].price_change_pct) {
     let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
     if (parseFloat(data["1d"].price_change_pct) < 0) {
       percentageDecrease = true;
@@ -26,7 +26,7 @@ function CoinCard({ data, theme, saveFavoriteCoin }) {
   if (parseFloat(data.price) < 1) {
     price = `$${data.price}`;
   } else {
-    price = `$${parseFloat(data.price).toFixed(2)}`
+    price = formatter.format(parseFloat(data.price).toFixed(2));
   }
 
   return (
