@@ -1,9 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { FlatList, StyleSheet, TextInput } from "react-native";
+import { FlatList, StyleSheet, TextInput, View } from "react-native";
 import { connect } from "react-redux";
-import { deleteFavorite, fetchCoinList, saveFavoriteCoin, searchCoinList } from "../actions";
+import { Picker } from '@react-native-picker/picker';
+
+import { deleteFavorite, fetchCoinList, saveFavoriteCoin, searchCoinList, sortList } from "../actions";
 import CoinCard from "../components/CoinCard/CoinCard";
 import EmptyList from "../components/EmptyList/EmptyList";
 
@@ -15,11 +17,17 @@ const List = props => {
 
     const [search, setSearch] = useState('');
     const [favoriteCoins, setFavoriteCoints] = useState(initialData);
+    const [selectedFilter, setSelectedFilter] = useState();
+    const [listLoading, setListLoading] = useState(false);
 
     let isFocused = useIsFocused();
 
     useEffect(() => {
         getFavoriteCoins();
+
+        return () => {
+            setSelectedFilter('rank');
+        }
     }, [isFocused]);
 
     const _renderItem = ({ item }) => {
@@ -76,15 +84,41 @@ const List = props => {
         }
     }
 
+    const sortCoinList = (itemValue) => {
+        setSelectedFilter(itemValue);
+        props.sortList(itemValue);
+        setListLoading(true);
+
+        setTimeout(() => {
+            setListLoading(false);
+        }, 500)
+    }
+
     return (
         <>
             <TextInput
-                style={props.theme ? styles.inputLight : styles.inputDark}
+                style={styles.inputDark}
                 value={search}
                 onChangeText={(e) => { onSearchChange(e), setSearch(e) }}
                 placeholder="Search..."
                 placeholderTextColor={props.theme ? "#000" : "#66666B"}
             />
+            <View style={styles.pickerContainer}>
+                <View style={styles.pickerWrapper}>
+                    <Picker
+                        selectedValue={selectedFilter}
+                        onValueChange={(itemValue, itemIndex) =>
+                            sortCoinList(itemValue)
+                        }
+                        dropdownIconColor="#FFF"
+                        style={styles.picker}
+                    >
+                        <Picker.Item label="Rank" value="rank" />
+                        <Picker.Item label="Price : High ~ Low" value="dsc" />
+                        <Picker.Item label="Price : Low ~ High" value="asc" />
+                    </Picker>
+                </View>
+            </View>
             <FlatList
                 data={props.coinData}
                 renderItem={_renderItem}
@@ -93,7 +127,7 @@ const List = props => {
                 decelerationRate={'fast'}
                 keyExtractor={(item, index) => index.toString()}
                 onRefresh={() => _onRefresh()}
-                refreshing={props.loading}
+                refreshing={props.loading || listLoading}
                 ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
                 extraData={props.coinData}
             />
@@ -114,6 +148,9 @@ const mapDispatchToProps = dispatch => {
         },
         deleteFavorites: (name) => {
             dispatch(deleteFavorite(name))
+        },
+        sortList: (name) => {
+            dispatch(sortList(name))
         }
     };
 };
@@ -133,14 +170,13 @@ export default connect(
 const styles = StyleSheet.create({
     inputDark: {
         marginTop: 20,
-        marginBottom: 12,
         marginLeft: 12,
         marginRight: 12,
         color: '#fff',
         fontSize: 18,
         backgroundColor: "#262530",
         borderRadius: 50,
-        padding: 10
+        padding: 14
     },
     inputLight: {
         marginTop: 20,
@@ -153,4 +189,18 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         padding: 15
     },
+    picker: {
+        color: "#FFF",
+        // height: 50
+    },
+    pickerWrapper: {
+        borderColor: "#262530",
+        borderWidth: 1,
+        backgroundColor: "#262530",
+        borderRadius: 50,
+    },
+    pickerContainer: {
+        marginHorizontal: 12,
+        marginVertical: 15
+    }
 });

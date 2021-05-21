@@ -9,7 +9,7 @@ function FavoriteCard({ data, deleteFavorite }) {
     let increaseRate;
     let price = 0;
 
-    if (!!data["1d"].price_change_pct) {
+    if (data && data["1d"] && data["1d"].price_change_pct) {
         let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
         if (parseFloat(data["1d"].price_change_pct) < 0) {
             percentageDecrease = true;

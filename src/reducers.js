@@ -4,8 +4,10 @@ import {
   FETCH_COIN_DETAILS,
   SEARCH_COINS,
   SAVE_FAVORITE,
-  DELETE_FAVORITE
+  DELETE_FAVORITE,
+  SORT_LIST
 } from "./types";
+import { sortByPriceAsc, sortByPriceDsc, sortByRank, sortByRankDsc } from "./util/Helpers";
 
 const initialState = {
   loading: false,
@@ -89,6 +91,21 @@ export default function coinDataReducer(state = initialState, action) {
       return {
         ...state
       };
+    case SORT_LIST:
+      if (action.payload.type === "asc") {
+        state.coinData.sort(sortByPriceAsc);
+        state.allCoinData.sort(sortByPriceAsc);
+      } else if (action.payload.type === "dsc") {
+        state.coinData.sort(sortByPriceDsc);
+        state.allCoinData.sort(sortByPriceDsc);
+      } else {
+        state.coinData.sort(sortByRank);
+        state.allCoinData.sort(sortByRank);
+      }
+      console.log(state.coinData)
+      return {
+        ...state
+      }
     default:
       return state;
   }

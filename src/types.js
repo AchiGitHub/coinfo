@@ -7,3 +7,5 @@ export const SEARCH_COINS = "SEARCH_COINS";
 export const SAVE_FAVORITE = "SAVE_FAVORITE";
 
 export const DELETE_FAVORITE = "DELETE_FAVORITE";
+
+export const SORT_LIST = "SORT_LIST";
