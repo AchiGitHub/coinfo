@@ -60,7 +60,7 @@ const App = (props) => {
             adUnitID="ca-app-pub-8167817804987450/7911429163"  //production id
             testDeviceID={[PublisherBanner.simulatorId]}
             onAdFailedToLoad={error => console.error(error)}
-            onAppEvent={event => console.log(event.name, event.info)}
+          // onAppEvent={event => console.log(event.name, event.info)}
           />
         </View>
       </SafeAreaView>

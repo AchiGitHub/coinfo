@@ -33,7 +33,7 @@ PushNotification.createChannel(
 );
 
 var today = new Date();
-today.setDate(today.getDate())
+today.setDate(today.getDate() + 1)
 today.setHours(20)
 today.setMinutes(0)
 today.setMilliseconds(0)
