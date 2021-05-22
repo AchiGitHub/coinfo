@@ -32,7 +32,7 @@ function WishList(props) {
     }
 
     const setFavoriteData = (data) => {
-        const filteredArray = props.coinData.filter((el) => {
+        const filteredArray = props.allCoinData.filter((el) => {
             return data.some((f) => {
                 return f === el.name;
             });
@@ -107,7 +107,8 @@ const mapDispatchToProps = dispatch => {
 
 const mapStateToProps = state => {
     return {
-        coinData: state.coinData
+        coinData: state.coinData,
+        allCoinData: state.allCoinData
     };
 };
 

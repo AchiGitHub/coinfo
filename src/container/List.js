@@ -27,6 +27,7 @@ const List = props => {
 
         return () => {
             setSelectedFilter('rank');
+            setSearch('');
         }
     }, [isFocused]);
 
