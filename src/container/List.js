@@ -37,6 +37,8 @@ const List = props => {
 
     const _onRefresh = () => {
         getFavoriteCoins();
+        setSearch('');
+        setSelectedFilter('rank');
     }
 
     const onSearchChange = (value) => {
