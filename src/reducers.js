@@ -102,7 +102,6 @@ export default function coinDataReducer(state = initialState, action) {
         state.coinData.sort(sortByRank);
         state.allCoinData.sort(sortByRank);
       }
-      console.log(state.coinData)
       return {
         ...state
       }
