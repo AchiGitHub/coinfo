@@ -50,7 +50,7 @@ const List = props => {
             const jsonValue = JSON.stringify(value)
             await AsyncStorage.setItem('@coins', jsonValue);
         } catch (e) {
-            console.log(e)
+            // console.log(e)
         }
     }
 
@@ -113,7 +113,7 @@ const List = props => {
                         onValueChange={(itemValue, itemIndex) =>
                             sortCoinList(itemValue)
                         }
-                        dropdownIconColor="#FFF"
+                        dropdownIconColor="#66666B"
                         style={styles.picker}
                     >
                         <Picker.Item label="Rank" value="rank" />
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         padding: 15
     },
     picker: {
-        color: "#FFF",
+        color: "#66666B",
         // height: 50
     },
     pickerWrapper: {
