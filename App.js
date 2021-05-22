@@ -10,7 +10,7 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import { SafeAreaView, StatusBar, StyleSheet, Text, View, Switch, Platform } from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet, Text, View, Switch, Platform, PushNotificationIOS } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import thunk from 'redux-thunk';
 import { AdMobBanner, PublisherBanner } from 'react-native-admob';
@@ -22,6 +22,7 @@ import reducers from './src/reducers';
 
 import List from './src/container/List';
 import WishList from './src/container/WishList';
+import PushNotification, { Importance } from 'react-native-push-notification';
 
 // Middlewares: applyMiddleware() tells createStore() how to handle middleware
 const middleware = applyMiddleware(thunk);
@@ -79,15 +80,14 @@ const App = (props) => {
             tabBarLabel: 'Home',
             tabBarIcon: ({ color, size }) => (
               <Icon name="home" color={color} size={size} />
-            ),
-            unmountOnBlur: true
+            )
           }}
           />
           <Tab.Screen name="Wish list" component={WishList} options={{
             tabBarLabel: 'Wish List',
             tabBarIcon: ({ color, size }) => (
               <FontistoIcon name="favorite" color={color} size={size} />
-            ),
+            )
           }}
           />
         </Tab.Navigator>

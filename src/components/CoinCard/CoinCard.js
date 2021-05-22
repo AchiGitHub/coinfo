@@ -1,54 +1,71 @@
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { SvgCssUri } from "react-native-svg";
 import Icon from "react-native-vector-icons/AntDesign";
 
-function CoinCard({ data, theme, favoriteCoins, saveFavoriteCoin }) {
+function CoinCard({ data, theme, saveFavoriteCoin }) {
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
 
   let percentageDecrease = false;
   let increaseRate;
+  let price = 0;
 
-  if (!!data.changePercent24Hr) {
-    if (data.changePercent24Hr.includes("-")) {
+  if (data && data["1d"] && data["1d"].price_change_pct) {
+    let pricePercantage24h = parseFloat(data["1d"].price_change_pct) * 100;
+    if (parseFloat(data["1d"].price_change_pct) < 0) {
       percentageDecrease = true;
-      increaseRate = `${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+      increaseRate = `${pricePercantage24h.toFixed(2)}%`;
     } else {
-      increaseRate = `+${parseFloat(data.changePercent24Hr).toFixed(2)}%`;
+      increaseRate = `+${pricePercantage24h.toFixed(2)}%`;
     }
   } else {
     increaseRate = "-";
   }
 
-  useEffect(() => {
-    if (favoriteCoins.coins.includes(data.name)) {
-      setIsFavorite(true);
-    }
-  }, [favoriteCoins.coins])
+  if (parseFloat(data.price) < 1) {
+    price = `$${data.price}`;
+  } else {
+    price = formatter.format(parseFloat(data.price).toFixed(2));
+  }
 
   return (
-    <View style={!theme ? styles.container : styles.containerLight}>
-      <View style={!theme ? styles.cardBody : styles.cardBodyLight}>
+    <View style={styles.container}>
+      <View style={styles.cardBody}>
         <View style={styles.cardBodyTop}>
-          <View>
-            <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
-              {data.name}
-            </Text>
-            <Text style={styles.coinSymbol} numberOfLines={2}>
-              {data.symbol}
-            </Text>
+          <View style={styles.nameSlot}>
+            <View style={styles.logo}>
+              {
+                data.logo_url.includes('svg') ? <SvgCssUri
+                  width={30}
+                  height={30}
+                  uri={data.logo_url}
+                />
+                  : <Image source={{ uri: data.logo_url }} style={{ width: 30, height: 30, resizeMode: 'cover' }} />
+              }
+            </View>
+            <View>
+              <View>
+                <Text style={!theme ? styles.cardNameDark : styles.cardNameLight} numberOfLines={2}>
+                  {data.name}
+                </Text>
+              </View>
+              <Text style={styles.coinSymbol} numberOfLines={2}>
+                {data.symbol}
+              </Text>
+            </View>
           </View>
           <View style={styles.coinDetails}>
             <View>
               <Text style={!theme ? styles.coinRate : styles.coinRateLight} numberOfLines={2}>
-                {formatter.format(parseFloat(data.priceUsd))}
+                {price}
               </Text>
               <Text style={percentageDecrease ? styles.rateOfDecrease : styles.rateOfIncrease} numberOfLines={2}>
                 {increaseRate}
               </Text>
             </View>
-            <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name) }}>
-              <Icon name={isFavorite ? "star" : "staro"} color="#ffd56b" size={20} style={styles.favorite} />
+            <TouchableOpacity onPress={() => { setIsFavorite(!isFavorite); saveFavoriteCoin(data.name, !isFavorite) }}>
+              <Icon name={data.isFavorite ? "star" : "staro"} color="#ffd56b" size={20} style={styles.favorite} />
             </TouchableOpacity>
           </View>
         </View>
@@ -62,12 +79,6 @@ export default CoinCard;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#191721"
-  },
-  cardContainer: {
-    padding: 15,
-    paddingBottom: 0,
-    paddingTop: 0,
-    marginTop: 15
   },
   cardBody: {
     paddingLeft: 8,
@@ -154,6 +165,18 @@ const styles = StyleSheet.create({
   favorite: {
     marginLeft: 10,
     marginTop: 7
+  },
+  nameSlot: {
+    flexDirection: 'row'
+  },
+  rank: {
+    color: '#FFF',
+    marginTop: 2,
+    marginRight: 5,
+    fontWeight: 'bold'
+  },
+  logo: {
+    padding: 8
   }
 });
 
