@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import React, { useEffect, useState } from "react";
 import { useIsFocused } from "@react-navigation/native";
-import { FlatList, StyleSheet, TextInput, View } from "react-native";
+import { Dimensions, FlatList, StyleSheet, TextInput, View } from "react-native";
 import { connect } from "react-redux";
 import { Picker } from '@react-native-picker/picker';
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -119,7 +119,6 @@ const List = props => {
                         }
                         dropdownIconColor="#191721"
                         style={styles.picker}
-                    // numberOfLines={2}
                     >
                         <Picker.Item label="Rank" value="rank" />
                         <Picker.Item label="Price : High ~ Low" value="dsc" />
@@ -208,8 +207,7 @@ const styles = StyleSheet.create({
         borderRadius: 30,
         width: 50,
         height: 55,
-        top: 5,
-        flex: 1
+        top: 5
     },
     pickerContainer: {
         marginHorizontal: 12,
@@ -217,12 +215,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     searchBar: {
-        flex: 10
+        width: Dimensions.get('window').width - 50
     },
     filters: {
         position: 'absolute',
         top: 12,
-        right: 8,
         zIndex: 999
     }
 });
