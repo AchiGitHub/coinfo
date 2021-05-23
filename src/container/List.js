@@ -4,6 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { FlatList, StyleSheet, TextInput, View } from "react-native";
 import { connect } from "react-redux";
 import { Picker } from '@react-native-picker/picker';
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import { deleteFavorite, fetchCoinList, saveFavoriteCoin, searchCoinList, sortList } from "../actions";
 import CoinCard from "../components/CoinCard/CoinCard";
@@ -99,15 +100,18 @@ const List = props => {
 
     return (
         <>
-            <TextInput
-                style={styles.inputDark}
-                value={search}
-                onChangeText={(e) => { onSearchChange(e), setSearch(e) }}
-                placeholder="Search..."
-                placeholderTextColor={props.theme ? "#000" : "#66666B"}
-            />
             <View style={styles.pickerContainer}>
+                <View style={styles.searchBar} >
+                    <TextInput
+                        style={styles.inputDark}
+                        value={search}
+                        onChangeText={(e) => { onSearchChange(e), setSearch(e) }}
+                        placeholder="Search..."
+                        placeholderTextColor={props.theme ? "#000" : "#66666B"}
+                    />
+                </View>
                 <View style={styles.pickerWrapper}>
+                    <Icon name={"filter-menu"} color="#66666B" size={20} style={styles.filters} />
                     <Picker
                         selectedValue={selectedFilter}
                         onValueChange={(itemValue, itemIndex) =>
@@ -115,6 +119,7 @@ const List = props => {
                         }
                         dropdownIconColor="#66666B"
                         style={styles.picker}
+                    // numberOfLines={2}
                     >
                         <Picker.Item label="Rank" value="rank" />
                         <Picker.Item label="Price : High ~ Low" value="dsc" />
@@ -133,6 +138,7 @@ const List = props => {
                 refreshing={props.loading || listLoading}
                 ListEmptyComponent={props.loading ? "" : <EmptyList theme={props.theme} />}
                 extraData={props.coinData}
+                keyboardShouldPersistTaps={'handled'}
             />
         </>
     );
@@ -172,9 +178,8 @@ export default connect(
 
 const styles = StyleSheet.create({
     inputDark: {
-        marginTop: 20,
-        marginLeft: 12,
-        marginRight: 12,
+        marginTop: 5,
+        marginRight: 8,
         color: '#fff',
         fontSize: 18,
         backgroundColor: "#262530",
@@ -194,16 +199,29 @@ const styles = StyleSheet.create({
     },
     picker: {
         color: "#66666B",
-        // height: 50
+        height: 10
     },
     pickerWrapper: {
         borderColor: "#262530",
         borderWidth: 1,
         backgroundColor: "#262530",
-        borderRadius: 50,
+        borderRadius: 30,
+        // width: 50,
+        height: 55,
+        top: 5,
+        flex: 1
     },
     pickerContainer: {
         marginHorizontal: 12,
-        marginVertical: 15
+        marginVertical: 6,
+        flexDirection: 'row',
+    },
+    searchBar: {
+        flex: 7
+    },
+    filters: {
+        position: 'absolute',
+        top: 20,
+        right: 12
     }
 });
