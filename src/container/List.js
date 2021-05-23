@@ -101,7 +101,7 @@ const List = props => {
     return (
         <>
             <View style={styles.pickerContainer}>
-                <View style={styles.searchBar} >
+                <View style={{ width: Dimensions.get('window').width - 50 }}>
                     <TextInput
                         style={styles.inputDark}
                         value={search}
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     searchBar: {
-        width: Dimensions.get('window').width - 50
+
     },
     filters: {
         position: 'absolute',
