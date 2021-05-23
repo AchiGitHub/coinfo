@@ -4,7 +4,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { FlatList, StyleSheet, TextInput, View } from "react-native";
 import { connect } from "react-redux";
 import { Picker } from '@react-native-picker/picker';
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 import { deleteFavorite, fetchCoinList, saveFavoriteCoin, searchCoinList, sortList } from "../actions";
 import CoinCard from "../components/CoinCard/CoinCard";
@@ -111,13 +111,13 @@ const List = props => {
                     />
                 </View>
                 <View style={styles.pickerWrapper}>
-                    <Icon name={"filter-menu"} color="#66666B" size={20} style={styles.filters} />
+                    <Icon name={"bars"} color="#66666B" size={25} style={styles.filters} />
                     <Picker
                         selectedValue={selectedFilter}
                         onValueChange={(itemValue, itemIndex) =>
                             sortCoinList(itemValue)
                         }
-                        dropdownIconColor="#66666B"
+                        dropdownIconColor="#191721"
                         style={styles.picker}
                     // numberOfLines={2}
                     >
@@ -202,11 +202,11 @@ const styles = StyleSheet.create({
         height: 10
     },
     pickerWrapper: {
-        borderColor: "#262530",
+        borderColor: "#191721",
         borderWidth: 1,
-        backgroundColor: "#262530",
+        backgroundColor: "#191721",
         borderRadius: 30,
-        // width: 50,
+        width: 50,
         height: 55,
         top: 5,
         flex: 1
@@ -217,11 +217,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     searchBar: {
-        flex: 7
+        flex: 10
     },
     filters: {
         position: 'absolute',
-        top: 20,
-        right: 12
+        top: 12,
+        right: 8,
+        zIndex: 999
     }
 });
