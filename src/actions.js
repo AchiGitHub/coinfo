@@ -1,17 +1,43 @@
 /* eslint-disable prettier/prettier */
 import axios from "axios";
-import { DELETE_FAVORITE, FETCH_COIN_DETAILS, FETCH_COIN_DETAILS_FAILED, FETCH_COIN_DETAILS_SUCCESS, SAVE_FAVORITE, SEARCH_COINS, SORT_LIST } from './types';
+import {
+    DELETE_FAVORITE,
+    FETCH_COIN_DETAILS,
+    FETCH_COIN_DETAILS_FAILED,
+    FETCH_COIN_DETAILS_SUCCESS,
+    FETCH_SECONDARY_LIST,
+    SAVE_FAVORITE,
+    SEARCH_COINS,
+    SORT_LIST,
+    FETCH_SECONDARY_LIST_SUCCESS,
+    FETCH_SECONDARY_LIST_FAILED
+} from './types';
 
 export function fetchCoinList(data) {
     return dispatch => {
         dispatch(fetchCoinDetails(data));
         axios
-            .get(`https://api.nomics.com/v1/currencies/ticker?key=aec0250b1d047a85b34b149b04aeacab194a2ac8&per-page=150&interval=1d`)
+            .get(`https://api.nomics.com/v1/currencies/ticker?key=aec0250b1d047a85b34b149b04aeacab194a2ac8&page=1&per-page=100&interval=1d`)
             .then(res => {
                 dispatch(fetchCoinDetailsSuccess(res.data));
+                dispatch(fetchNextSet());
             })
             .catch(err => {
                 dispatch(fetchCoinDetailsFailed(err.message));
+            });
+    };
+};
+
+export function fetchNextSet() {
+    return dispatch => {
+        dispatch(fetchSecondaryList());
+        axios
+            .get(`https://api.nomics.com/v1/currencies/ticker?key=aec0250b1d047a85b34b149b04aeacab194a2ac8&page=2&per-page=100&interval=1d`)
+            .then(res => {
+                dispatch(fetchSecondaryListSuccess(res.data));
+            })
+            .catch(err => {
+                dispatch(fetchSecondaryListFailed(err.message));
             });
     };
 };
@@ -86,5 +112,26 @@ const sortCoinList = (type) => ({
     type: SORT_LIST,
     payload: {
         type
+    }
+});
+
+const fetchSecondaryList = (data) => ({
+    type: FETCH_SECONDARY_LIST,
+    payload: {
+        data
+    }
+});
+
+const fetchSecondaryListSuccess = data => ({
+    type: FETCH_SECONDARY_LIST_SUCCESS,
+    payload: {
+        data
+    }
+});
+
+const fetchSecondaryListFailed = error => ({
+    type: FETCH_SECONDARY_LIST_FAILED,
+    payload: {
+        error
     }
 });
