@@ -5,7 +5,10 @@ import {
   SEARCH_COINS,
   SAVE_FAVORITE,
   DELETE_FAVORITE,
-  SORT_LIST
+  SORT_LIST,
+  FETCH_SECONDARY_LIST_SUCCESS,
+  FETCH_SECONDARY_LIST,
+  FETCH_SECONDARY_LIST_FAILED
 } from "./types";
 import { sortByPriceAsc, sortByPriceDsc, sortByRank, sortByRankDsc } from "./util/Helpers";
 
@@ -105,6 +108,34 @@ export default function coinDataReducer(state = initialState, action) {
       return {
         ...state
       }
+    case FETCH_SECONDARY_LIST:
+      return {
+        ...state
+      };
+    case FETCH_SECONDARY_LIST_SUCCESS:
+      //check if theres favorites and set variable to true
+      if (state.favoriteCoins.length !== 0) {
+        action.payload.data.map((data, key) => {
+          if (state.favoriteCoins.includes(data.name)) {
+            data.isFavorite = true;
+          } else {
+            data.isFavorite = false;
+          }
+        });
+      }
+      return {
+        ...state,
+        coinData: [...state.coinData, ...action.payload.data],
+        allCoinData: [...state.coinData, ...action.payload.data]
+      };
+    case FETCH_SECONDARY_LIST_FAILED:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload.error,
+        coinData: [],
+        allCoinData: []
+      };
     default:
       return state;
   }
