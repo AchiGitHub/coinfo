@@ -45,7 +45,7 @@ PushNotification.localNotificationSchedule({
     message: "Have you checked the prices today?🤔 ", // (required)
     date: new Date(today), // in 60 secs
     allowWhileIdle: false, // (optional) set notification to work while on doze, default: false
-    repeatType: "hour",
+    repeatType: "day",
     number: 1
 });
 
