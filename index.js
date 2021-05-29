@@ -44,6 +44,7 @@ PushNotification.localNotificationSchedule({
     channelId: "xxx1",
     message: "Have you checked the prices today?🤔 ", // (required)
     date: new Date(today), // in 60 secs
+    repeatType: 'day'
 });
 
 AppRegistry.registerComponent(appName, () => App);
