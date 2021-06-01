@@ -33,17 +33,16 @@ PushNotification.createChannel(
 );
 
 var today = new Date();
-today.setDate(today.getDate() + 1)
 today.setHours(20)
 today.setMinutes(0)
-today.setMilliseconds(0)
 
 PushNotification.localNotificationSchedule({
     //... You can use all the options from localNotifications
-    id: 5,
+    id: 12321,
     channelId: "xxx1",
     message: "Have you checked the prices today?🤔 ", // (required)
-    date: new Date(today), // in 60 secs
+    date: today, // in 60 secs
+    repeatType: 'day'
 });
 
 AppRegistry.registerComponent(appName, () => App);
